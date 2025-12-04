@@ -47,7 +47,7 @@ Then restart NetworkManager to apply the change:
 
 This ensures NetworkManager will delegate Wi-Fi management to iwd and will not restart wpa_supplicant.
 
-Stop wpa_supplicant and prevent it from restarting<br>
+Stop and disable wpa_supplicant<br>
 `sudo systemctl stop wpa_supplicant`<br>
 `sudo systemctl disable wpa_supplicant`
 
