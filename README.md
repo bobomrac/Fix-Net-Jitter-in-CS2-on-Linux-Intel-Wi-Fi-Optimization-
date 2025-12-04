@@ -34,13 +34,13 @@ Stop wpa_supplicant and prevent it from restarting `sudo systemctl stop wpa_supp
 
 ### Important: NetworkManager may attempt to restart wpa_supplicant. To prevent this, you need to configure NetworkManager to use iwd as the backend.
 
-Configure NetworkManager to use iwd
+## Configure NetworkManager to use iwd
 
 NetworkManager supports iwd natively on most modern distributions. Conceptually:
 
 Set `wifi.backend=iwd` in NetworkManager’s configuration file, usually at /etc/NetworkManager/NetworkManager.conf:
 
-`[device]`
+`[device]`<br>
 `wifi.backend=iwd`
 
 Then restart NetworkManager to apply the change:
