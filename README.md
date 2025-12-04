@@ -40,8 +40,8 @@ NetworkManager supports iwd natively on most modern distributions. Conceptually:
 
 Set `wifi.backend=iwd` in NetworkManager’s configuration file, usually at /etc/NetworkManager/NetworkManager.conf:
 
-`[device] 
-wifi.backend=iwd`
+`[device]`
+`wifi.backend=iwd`
 
 Then restart NetworkManager to apply the change:
 
@@ -49,9 +49,10 @@ Then restart NetworkManager to apply the change:
 
 This ensures NetworkManager will delegate Wi-Fi management to iwd and will not restart wpa_supplicant.
 
-Enable and verify iwd `sudo systemctl enable iwd sudo systemctl start iwd`
+Enable and verify iwd `sudo systemctl enable iwd` `sudo systemctl start iwd`
 
-`systemctl status iwd systemctl status wpa_supplicant`
+`systemctl status iwd`
+`systemctl status wpa_supplicant`
 
 Only iwd should be active.
 
@@ -59,7 +60,10 @@ Optimize Intel Wi-Fi driver and firmware
 
 Recommended driver options (conceptual explanation):
 
-`options iwlwifi power_save=0 # disable Wi-Fi power saving options iwlwifi uapsd_disable=1 # prevent packet aggregation pauses options iwlwifi disable_11ax=1 # optional: disable Wi-Fi 6 if unstable options iwlmvm power_scheme=1 # set firmware to high-performance mode`
+`options iwlwifi power_save=0 # disable Wi-Fi power saving`
+`options iwlwifi uapsd_disable=1 # prevent packet aggregation pauses`
+`options iwlwifi disable_11ax=1 # optional: disable Wi-Fi 6 if unstable`
+`options iwlmvm power_scheme=1 # set firmware to high-performance mode`
 
 How to apply (distro-independent approach):
 
