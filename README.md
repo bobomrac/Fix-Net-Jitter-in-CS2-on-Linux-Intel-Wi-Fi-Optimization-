@@ -38,8 +38,8 @@ NetworkManager supports iwd natively on most modern distributions.
 
 Make a NetworkManager’s configuration file, usually at `/etc/NetworkManager/conf.d/`<br> Name the file what you want e.g 'iwd.conf' and make sure it contains the following:
 
-`[device]<br>
-wifi.backend=iwd`
+`[device]`<br>
+`wifi.backend=iwd`
 
 Then restart NetworkManager to apply the change:
 
@@ -47,7 +47,7 @@ Then restart NetworkManager to apply the change:
 
 This ensures NetworkManager will delegate Wi-Fi management to iwd and will not restart wpa_supplicant.
 
-Stop and disable wpa_supplicant<br>
+Now stop and disable wpa_supplicant<br>
 `sudo systemctl stop wpa_supplicant`<br>
 `sudo systemctl disable wpa_supplicant`
 
@@ -64,10 +64,10 @@ Only iwd should be active.
 
 Recommended driver options (conceptual explanation):
 
-`options iwlwifi power_save=0 # disable Wi-Fi power saving`<br>
-`options iwlwifi uapsd_disable=1 # prevent packet aggregation pauses`<br>
-`options iwlwifi disable_11ax=1 # optional: disable Wi-Fi 6 if unstable`<br>
-`options iwlmvm power_scheme=1 # set firmware to high-performance mode`
+`options iwlwifi power_save=0` # disable Wi-Fi power saving<br>
+`options iwlwifi uapsd_disable=1` # prevent packet aggregation pauses<br>
+`options iwlwifi disable_11ax=1` # optional: disable Wi-Fi 6 if unstable or buggy on your router<br>
+`options iwlmvm power_scheme=1` # set firmware to high-performance mode
 
 How to apply (distro-independent approach):
 
