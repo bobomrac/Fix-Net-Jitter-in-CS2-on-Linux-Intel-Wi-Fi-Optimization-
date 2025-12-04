@@ -30,7 +30,9 @@ Check which supplicant is running with<br> `systemctl status wpa_supplicant`<br>
 
 The active service shows which supplicant is currently managing Wi-Fi.
 
-Stop wpa_supplicant and prevent it from restarting `sudo systemctl stop wpa_supplicant sudo systemctl disable wpa_supplicant`
+Stop wpa_supplicant and prevent it from restarting<br>
+`sudo systemctl stop wpa_supplicant`<br>
+`sudo systemctl disable wpa_supplicant`
 
 ### Important: NetworkManager may attempt to restart wpa_supplicant. To prevent this, you need to configure NetworkManager to use iwd as the backend.
 
