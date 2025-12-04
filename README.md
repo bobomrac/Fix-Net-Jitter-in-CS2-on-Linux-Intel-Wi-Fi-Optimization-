@@ -1,10 +1,10 @@
-#Fix Net Jitter in CS2 on Linux (Intel Wi-Fi Optimization)
+# Fix Net Jitter in CS2 on Linux (Intel Wi-Fi Optimization)
 
 Overview: Competitive CS2 gameplay on Linux can suffer from ping spikes, micro-stuttering, or erratic VAR readings, even on strong 5 GHz Wi-Fi. These issues are usually local to the system, caused by the interaction between the Wi-Fi supplicant, kernel driver, firmware, and network management services. Intel Wi-Fi hardware is capable, but default configurations prioritize compatibility and power saving over low-latency performance. Optimizing the stack eliminates most causes of network jitter in CS2.
 
 ##Technical Cause of Net Jitter
 
-###Wi-Fi Supplicant
+### Wi-Fi Supplicant
 
 The supplicant is the daemon responsible for authentication, encryption key management, and roaming.
 
@@ -12,7 +12,7 @@ Linux defaults to wpa_supplicant, which is broadly compatible but occasionally b
 
 iwd (Intel Wireless Daemon) is a modern, Intel-optimized alternative that manages Wi-Fi in a non-blocking, low-latency way.
 
-###Wi-Fi Driver and Firmware
+### Wi-Fi Driver and Firmware
 
 The kernel driver (iwlwifi) and firmware control packet transmission, aggregation, and power management.
 
@@ -20,11 +20,11 @@ Default power-saving introduces micro-sleep cycles or delayed packet processing,
 
 Disabling power-saving and forcing performance mode ensures immediate packet handling, stabilizing ping.
 
-###Service Conflicts
+### Service Conflicts
 
 Running multiple supplicants or letting NetworkManager automatically spawn wpa_supplicant can cause connection events, duplicated scans, and interface contention, worsening jitter. Only one active supplicant should manage the Wi-Fi interface.
 
-##Distro-Agnostic Conceptual Fix
+## Distro-Agnostic Conceptual Fix
 
     Check which supplicant is running systemctl status wpa_supplicant systemctl status iwd
 
@@ -68,7 +68,7 @@ Reload the driver to apply the settings (Wi-Fi will temporarily disconnect):
 
 sudo modprobe -r iwlwifi && sudo modprobe iwlwifi
 
-##Expected Outcomes
+## Expected Outcomes
 
 Elimination of recurring micro-jitter in CS2.
 
@@ -80,7 +80,7 @@ Works on any Linux distribution with Intel Wi-Fi cards.
 
 Slight increase in power consumption (acceptable for desktops or gaming laptops).
 
-#Summary
+# Summary
 
 Net jitter in CS2 on Linux is primarily a local system issue: default Wi-Fi stacks (wpa_supplicant + iwlwifi defaults) introduce micro-latency via authentication pauses and power-saving behaviors. By:
 
