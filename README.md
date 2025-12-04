@@ -40,7 +40,7 @@ Stop wpa_supplicant and prevent it from restarting<br>
 
 NetworkManager supports iwd natively on most modern distributions. Conceptually:
 
-Set `wifi.backend=iwd` in NetworkManager’s configuration file, usually at /etc/NetworkManager/NetworkManager.conf:
+Set `wifi.backend=iwd` in NetworkManager’s configuration file, usually at `/etc/NetworkManager/conf.d/`
 
 `[device]`<br>
 `wifi.backend=iwd`
@@ -51,14 +51,16 @@ Then restart NetworkManager to apply the change:
 
 This ensures NetworkManager will delegate Wi-Fi management to iwd and will not restart wpa_supplicant.
 
-Enable and verify iwd `sudo systemctl enable iwd` `sudo systemctl start iwd`
+Enable and verify iwd<br>
+`sudo systemctl enable iwd`<br>
+`sudo systemctl start iwd`
 
 `systemctl status iwd`<br>
 `systemctl status wpa_supplicant`
 
 Only iwd should be active.
 
-Optimize Intel Wi-Fi driver and firmware
+## Optimize Intel Wi-Fi driver and firmware
 
 Recommended driver options (conceptual explanation):
 
@@ -73,7 +75,7 @@ Place the options in a file in `/etc/modprobe.d/, e.g., iwlwifi-gaming.conf.`
 
 Reload the driver to apply the settings (Wi-Fi will temporarily disconnect):
 
-sudo modprobe -r iwlwifi && sudo modprobe iwlwifi
+`sudo modprobe -r iwlwifi && sudo modprobe iwlwifi`
 
 ## Expected Outcomes
 
