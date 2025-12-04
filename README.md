@@ -55,9 +55,9 @@ Now stop and disable wpa_supplicant<br>
 Enable and start iwd<br>
 `sudo systemctl enable --now iwd`<br>
 
-Status check so everything is correct
+Status check so everything is correct<br>
 `systemctl status iwd`<br>
-`systemctl status wpa_supplicant`
+`systemctl status wpa_supplicant`<br>
 Only iwd should be active.<br>
 You will need to reconnect to your wi-fi
 
