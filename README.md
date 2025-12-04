@@ -55,10 +55,11 @@ Now stop and disable wpa_supplicant<br>
 Enable and start iwd<br>
 `sudo systemctl enable --now iwd`<br>
 
+Status check so everything is correct
 `systemctl status iwd`<br>
 `systemctl status wpa_supplicant`
-
-Only iwd should be active.
+Only iwd should be active.<br>
+You will need to reconnect to your wi-fi
 
 ## Optimize Intel Wi-Fi driver and firmware
 
