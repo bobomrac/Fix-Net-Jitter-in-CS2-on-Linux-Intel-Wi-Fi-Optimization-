@@ -30,14 +30,9 @@ Check which supplicant is running with<br> `systemctl status wpa_supplicant`<br>
 
 The active service shows which supplicant is currently managing Wi-Fi.
 
-Stop wpa_supplicant and prevent it from restarting<br>
-`sudo systemctl stop wpa_supplicant`<br>
-`sudo systemctl disable wpa_supplicant`
-
 ## Stopping wpa & Configure NetworkManager to use iwd
 
 Why this is important: NetworkManager may attempt to restart wpa_supplicant. To prevent this, you need to configure NetworkManager to use iwd as the backend.
-
 
 NetworkManager supports iwd natively on most modern distributions.
 
@@ -51,6 +46,11 @@ Then restart NetworkManager to apply the change:
 `sudo systemctl restart NetworkManager`
 
 This ensures NetworkManager will delegate Wi-Fi management to iwd and will not restart wpa_supplicant.
+
+Stop wpa_supplicant and prevent it from restarting<br>
+`sudo systemctl stop wpa_supplicant`<br>
+`sudo systemctl disable wpa_supplicant`
+
 
 Enable and start iwd<br>
 `sudo systemctl enable --now iwd`<br>
