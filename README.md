@@ -24,7 +24,7 @@ Disabling power-saving and forcing performance mode ensures immediate packet han
 
 Running multiple supplicants or letting NetworkManager automatically spawn wpa_supplicant can cause connection events, duplicated scans, and interface contention, worsening jitter. Only one active supplicant should manage the Wi-Fi interface.
 
-## Distro-Agnostic Conceptual Fix
+## FIX
 
 Check which supplicant is running with<br> `systemctl status wpa_supplicant`<br> `systemctl status iwd`
 
@@ -34,13 +34,14 @@ Stop wpa_supplicant and prevent it from restarting<br>
 `sudo systemctl stop wpa_supplicant`<br>
 `sudo systemctl disable wpa_supplicant`
 
-### Important: NetworkManager may attempt to restart wpa_supplicant. To prevent this, you need to configure NetworkManager to use iwd as the backend.
+## Stopping wpa & Configure NetworkManager to use iwd
 
-## Configure NetworkManager to use iwd
+Why this is important: NetworkManager may attempt to restart wpa_supplicant. To prevent this, you need to configure NetworkManager to use iwd as the backend.
 
-NetworkManager supports iwd natively on most modern distributions. Conceptually:
 
-Set `wifi.backend=iwd` in NetworkManager’s configuration file, usually at `/etc/NetworkManager/conf.d/`
+NetworkManager supports iwd natively on most modern distributions.
+
+Make a NetworkManager’s configuration file, usually at `/etc/NetworkManager/conf.d/` name it what you want e.g 'iwd.conf'
 
 `[device]`<br>
 `wifi.backend=iwd`
@@ -51,9 +52,8 @@ Then restart NetworkManager to apply the change:
 
 This ensures NetworkManager will delegate Wi-Fi management to iwd and will not restart wpa_supplicant.
 
-Enable and verify iwd<br>
-`sudo systemctl enable iwd`<br>
-`sudo systemctl start iwd`
+Enable and start iwd<br>
+`sudo systemctl enable --now iwd`<br>
 
 `systemctl status iwd`<br>
 `systemctl status wpa_supplicant`
