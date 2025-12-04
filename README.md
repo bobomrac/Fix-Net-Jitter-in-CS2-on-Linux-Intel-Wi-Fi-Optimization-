@@ -71,7 +71,7 @@ Recommended driver options (conceptual explanation):
 
 How to apply (distro-independent approach):
 
-Place the options in a file in `/etc/modprobe.d/, e.g., iwlwifi-gaming.conf.`
+Place the options in a file in `/etc/modprobe.d/`, e.g., iwlwifi-gaming.conf.
 
 Reload the driver to apply the settings (Wi-Fi will temporarily disconnect):
 
