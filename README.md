@@ -2,7 +2,7 @@
 
 Overview: Competitive CS2 gameplay on Linux can suffer from ping spikes, micro-stuttering, or erratic VAR readings, even on strong 5 GHz Wi-Fi. These issues are usually local to the system, caused by the interaction between the Wi-Fi supplicant, kernel driver, firmware, and network management services. Intel Wi-Fi hardware is capable, but default configurations prioritize compatibility and power saving over low-latency performance. Optimizing the stack eliminates most causes of network jitter in CS2.
 
-##Technical Cause of Net Jitter
+## Technical Cause of Net Jitter
 
 ### Wi-Fi Supplicant
 
@@ -26,39 +26,40 @@ Running multiple supplicants or letting NetworkManager automatically spawn wpa_s
 
 ## Distro-Agnostic Conceptual Fix
 
-    Check which supplicant is running systemctl status wpa_supplicant systemctl status iwd
+Check which supplicant is running with `systemctl status wpa_supplicant` `systemctl status iwd`
 
 The active service shows which supplicant is currently managing Wi-Fi.
 
-    Stop wpa_supplicant and prevent it from restarting sudo systemctl stop wpa_supplicant sudo systemctl disable wpa_supplicant
+Stop wpa_supplicant and prevent it from restarting `sudo systemctl stop wpa_supplicant sudo systemctl disable wpa_supplicant`
 
-Important: NetworkManager may attempt to restart wpa_supplicant. To prevent this, you need to configure NetworkManager to use iwd as the backend.
+## Important: NetworkManager may attempt to restart wpa_supplicant. To prevent this, you need to configure NetworkManager to use iwd as the backend.
 
-    Configure NetworkManager to use iwd
+Configure NetworkManager to use iwd
 
 NetworkManager supports iwd natively on most modern distributions. Conceptually:
 
-Set wifi.backend=iwd in NetworkManager’s configuration file, usually at /etc/NetworkManager/NetworkManager.conf:
+Set `wifi.backend=iwd` in NetworkManager’s configuration file, usually at /etc/NetworkManager/NetworkManager.conf:
 
-[device] wifi.backend=iwd
+`[device] 
+wifi.backend=iwd`
 
 Then restart NetworkManager to apply the change:
 
-sudo systemctl restart NetworkManager
+`sudo systemctl restart NetworkManager`
 
 This ensures NetworkManager will delegate Wi-Fi management to iwd and will not restart wpa_supplicant.
 
-    Enable and verify iwd sudo systemctl enable iwd sudo systemctl start iwd
+Enable and verify iwd `sudo systemctl enable iwd sudo systemctl start iwd`
 
-systemctl status iwd systemctl status wpa_supplicant
+`systemctl status iwd systemctl status wpa_supplicant`
 
 Only iwd should be active.
 
-    Optimize Intel Wi-Fi driver and firmware
+Optimize Intel Wi-Fi driver and firmware
 
 Recommended driver options (conceptual explanation):
 
-options iwlwifi power_save=0 # disable Wi-Fi power saving options iwlwifi uapsd_disable=1 # prevent packet aggregation pauses options iwlwifi disable_11ax=1 # optional: disable Wi-Fi 6 if unstable options iwlmvm power_scheme=1 # set firmware to high-performance mode
+`options iwlwifi power_save=0 # disable Wi-Fi power saving options iwlwifi uapsd_disable=1 # prevent packet aggregation pauses options iwlwifi disable_11ax=1 # optional: disable Wi-Fi 6 if unstable options iwlmvm power_scheme=1 # set firmware to high-performance mode`
 
 How to apply (distro-independent approach):
 
