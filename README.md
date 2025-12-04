@@ -32,7 +32,7 @@ The active service shows which supplicant is currently managing Wi-Fi.
 
 Stop wpa_supplicant and prevent it from restarting `sudo systemctl stop wpa_supplicant sudo systemctl disable wpa_supplicant`
 
-## Important: NetworkManager may attempt to restart wpa_supplicant. To prevent this, you need to configure NetworkManager to use iwd as the backend.
+### Important: NetworkManager may attempt to restart wpa_supplicant. To prevent this, you need to configure NetworkManager to use iwd as the backend.
 
 Configure NetworkManager to use iwd
 
@@ -67,7 +67,7 @@ Recommended driver options (conceptual explanation):
 
 How to apply (distro-independent approach):
 
-Place the options in a file in /etc/modprobe.d/, e.g., iwlwifi-gaming.conf.
+Place the options in a file in `/etc/modprobe.d/, e.g., iwlwifi-gaming.conf.`
 
 Reload the driver to apply the settings (Wi-Fi will temporarily disconnect):
 
