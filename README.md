@@ -32,14 +32,14 @@ The active service shows which supplicant is currently managing Wi-Fi.
 
 ## Stopping wpa & Configure NetworkManager to use iwd
 
-Why this is important: NetworkManager may attempt to restart wpa_supplicant. To prevent this, you need to configure NetworkManager to use iwd as the backend.
+NetworkManager may attempt to restart wpa_supplicant. To prevent this, you need to configure NetworkManager to use iwd as the backend.<br>
 
 NetworkManager supports iwd natively on most modern distributions.
 
-Make a NetworkManager’s configuration file, usually at `/etc/NetworkManager/conf.d/` name it what you want e.g 'iwd.conf'
+Make a NetworkManager’s configuration file, usually at `/etc/NetworkManager/conf.d/`<br> Name the file what you want e.g 'iwd.conf' and make sure it contains the following:
 
-`[device]`<br>
-`wifi.backend=iwd`
+`[device]<br>
+wifi.backend=iwd`
 
 Then restart NetworkManager to apply the change:
 
