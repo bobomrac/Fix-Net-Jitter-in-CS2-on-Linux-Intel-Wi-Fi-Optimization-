@@ -26,7 +26,7 @@ Running multiple supplicants or letting NetworkManager automatically spawn wpa_s
 
 ## Distro-Agnostic Conceptual Fix
 
-Check which supplicant is running with `systemctl status wpa_supplicant` `systemctl status iwd`
+Check which supplicant is running with<br> `systemctl status wpa_supplicant`<br> `systemctl status iwd`
 
 The active service shows which supplicant is currently managing Wi-Fi.
 
@@ -51,7 +51,7 @@ This ensures NetworkManager will delegate Wi-Fi management to iwd and will not r
 
 Enable and verify iwd `sudo systemctl enable iwd` `sudo systemctl start iwd`
 
-`systemctl status iwd`
+`systemctl status iwd`<br>
 `systemctl status wpa_supplicant`
 
 Only iwd should be active.
@@ -60,9 +60,9 @@ Optimize Intel Wi-Fi driver and firmware
 
 Recommended driver options (conceptual explanation):
 
-`options iwlwifi power_save=0 # disable Wi-Fi power saving`
-`options iwlwifi uapsd_disable=1 # prevent packet aggregation pauses`
-`options iwlwifi disable_11ax=1 # optional: disable Wi-Fi 6 if unstable`
+`options iwlwifi power_save=0 # disable Wi-Fi power saving`<br>
+`options iwlwifi uapsd_disable=1 # prevent packet aggregation pauses`<br>
+`options iwlwifi disable_11ax=1 # optional: disable Wi-Fi 6 if unstable`<br>
 `options iwlmvm power_scheme=1 # set firmware to high-performance mode`
 
 How to apply (distro-independent approach):
