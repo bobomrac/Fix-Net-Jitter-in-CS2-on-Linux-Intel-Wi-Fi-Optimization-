@@ -1,112 +1,109 @@
-Fix Net Jitter in CS2 on Linux (Intel Wi-Fi Optimization)
+# Fix Net Jitter in CS2 on Linux (Intel Wi-Fi Optimization)
 
-Overview:
+## Overview
 Competitive CS2 gameplay on Linux can suffer from ping spikes, micro-stuttering, or erratic VAR readings, even on strong 5 GHz Wi-Fi. These issues are usually local to the system, caused by the interaction between the Wi-Fi supplicant, kernel driver, firmware, and network management services. Intel Wi-Fi hardware is capable, but default configurations prioritize compatibility and power saving over low-latency performance. Optimizing the stack eliminates most causes of network jitter in CS2.
 
-Technical Cause of Net Jitter
+## Technical Cause of Net Jitter
 
-Wi-Fi Supplicant
-
+### Wi-Fi Supplicant
 The supplicant is the daemon responsible for authentication, encryption key management, and roaming.
 
-Linux defaults to wpa_supplicant, which is broadly compatible but occasionally blocks networking during key refresh or background scans. On Intel Wi-Fi hardware, these pauses show up as micro-latency or jitter in CS2.
+- Linux defaults to `wpa_supplicant`, which is broadly compatible but occasionally blocks networking during key refresh or background scans. On Intel Wi-Fi hardware, these pauses show up as micro-latency or jitter in CS2.
+- `iwd` (Intel Wireless Daemon) is a modern, Intel-optimized alternative that manages Wi-Fi in a non-blocking, low-latency way.
 
-iwd (Intel Wireless Daemon) is a modern, Intel-optimized alternative that manages Wi-Fi in a non-blocking, low-latency way.
+### Wi-Fi Driver and Firmware
+The kernel driver (`iwlwifi`) and firmware control packet transmission, aggregation, and power management.
 
-Wi-Fi Driver and Firmware
+- Default power-saving introduces micro-sleep cycles or delayed packet processing, which increase latency variability.
+- Disabling power-saving and forcing performance mode ensures immediate packet handling, stabilizing ping.
 
-The kernel driver (iwlwifi) and firmware control packet transmission, aggregation, and power management.
+### Service Conflicts
+Running multiple supplicants or letting NetworkManager automatically spawn `wpa_supplicant` can cause connection events, duplicated scans, and interface contention, worsening jitter. Only one active supplicant should manage the Wi-Fi interface.
 
-Default power-saving introduces micro-sleep cycles or delayed packet processing, which increase latency variability.
+## Distro-Agnostic Conceptual Fix
 
-Disabling power-saving and forcing performance mode ensures immediate packet handling, stabilizing ping.
-
-Service Conflicts
-
-Running multiple supplicants or letting NetworkManager automatically spawn wpa_supplicant can cause connection events, duplicated scans, and interface contention, worsening jitter. Only one active supplicant should manage the Wi-Fi interface.
-
-Distro-Agnostic Conceptual Fix
-1. Check which supplicant is running
-systemctl status wpa_supplicant
-systemctl status iwd
-
+1. **Check which supplicant is running**
+   ```bash
+   systemctl status wpa_supplicant
+   systemctl status iwd
 
 The active service shows which supplicant is currently managing Wi-Fi.
 
-2. Stop wpa_supplicant and prevent it from restarting
+    Stop wpa_supplicant and prevent it from restarting
+    bash
+
 sudo systemctl stop wpa_supplicant
 sudo systemctl disable wpa_supplicant
 
-
 Important: NetworkManager may attempt to restart wpa_supplicant. To prevent this, you need to configure NetworkManager to use iwd as the backend.
 
-3. Configure NetworkManager to use iwd
+Configure NetworkManager to use iwd
+NetworkManager supports iwd natively on most modern distributions.
 
-NetworkManager supports iwd natively on most modern distributions. Conceptually:
-
-Set wifi.backend=iwd in NetworkManager’s configuration file, usually at /etc/NetworkManager/NetworkManager.conf:
+Set wifi.backend=iwd in NetworkManager's configuration file, usually at /etc/NetworkManager/NetworkManager.conf:
+ini
 
 [device]
 wifi.backend=iwd
 
-
 Then restart NetworkManager to apply the change:
+bash
 
 sudo systemctl restart NetworkManager
 
-
 This ensures NetworkManager will delegate Wi-Fi management to iwd and will not restart wpa_supplicant.
 
-4. Enable and verify iwd
+Enable and verify iwd
+bash
+
 sudo systemctl enable iwd
 sudo systemctl start iwd
 
 systemctl status iwd
 systemctl status wpa_supplicant
 
-
 Only iwd should be active.
 
-5. Optimize Intel Wi-Fi driver and firmware
+Optimize Intel Wi-Fi driver and firmware
+Recommended driver options:
+text
 
-Recommended driver options (conceptual explanation):
-
-options iwlwifi power_save=0        # disable Wi-Fi power saving
-options iwlwifi uapsd_disable=1     # prevent packet aggregation pauses
-options iwlwifi disable_11ax=1      # optional: disable Wi-Fi 6 if unstable
-options iwlmvm power_scheme=1       # set firmware to high-performance mode
-
+options iwlwifi power_save=0         # disable Wi-Fi power saving
+options iwlwifi uapsd_disable=1      # prevent packet aggregation pauses
+options iwlwifi disable_11ax=1       # optional: disable Wi-Fi 6 if unstable
+options iwlmvm power_scheme=1        # set firmware to high-performance mode
 
 How to apply (distro-independent approach):
 
-Place the options in a file in /etc/modprobe.d/, e.g., iwlwifi-gaming.conf.
+    Place the options in a file in /etc/modprobe.d/, e.g., iwlwifi-gaming.conf
 
-Reload the driver to apply the settings (Wi-Fi will temporarily disconnect):
+    Reload the driver to apply the settings (Wi-Fi will temporarily disconnect):
+    bash
 
 sudo modprobe -r iwlwifi && sudo modprobe iwlwifi
 
 Expected Outcomes
 
-Elimination of recurring micro-jitter in CS2.
+    Elimination of recurring micro-jitter in CS2
 
-Stable ping and VAR metrics in net_graph.
+    Stable ping and VAR metrics in net_graph
 
-Minimal packet loss and choke.
+    Minimal packet loss and choke
 
-Works on any Linux distribution with Intel Wi-Fi cards.
+    Works on any Linux distribution with Intel Wi-Fi cards
 
-Slight increase in power consumption (acceptable for desktops or gaming laptops).
+    Slight increase in power consumption (acceptable for desktops or gaming laptops)
 
 Summary
 
 Net jitter in CS2 on Linux is primarily a local system issue: default Wi-Fi stacks (wpa_supplicant + iwlwifi defaults) introduce micro-latency via authentication pauses and power-saving behaviors. By:
 
-Switching to iwd
+    Switching to iwd
 
-Ensuring only one supplicant is active
+    Ensuring only one supplicant is active
 
-Configuring NetworkManager to delegate Wi-Fi to iwd
+    Configuring NetworkManager to delegate Wi-Fi to iwd
 
-Disabling driver/firmware power-saving features
+    Disabling driver/firmware power-saving features
 
 Intel Wi-Fi hardware can achieve stable, low-latency networking ideal for competitive CS2.
